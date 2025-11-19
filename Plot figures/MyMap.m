@@ -1,0 +1,219 @@
+function fig = MyMap(UavTeam,mode,scenario)
+
+global AirwayNetwork AdjacentMatrix Airport Node Roundabout
+global intersection rh1 rh2 rh_z AirwayList lanewidth
+h=gcf;
+%         clf
+fig=figure(h);
+set(0,'defaultfigurecolor','w');
+set( gca, 'XTick', [], 'YTick', [],'ZTick', []  );
+ax = axes('Parent',h);
+
+% ax.YAxis.Visible = 'off';
+% 
+% ax.XAxis.Visible = 'off';
+ax.ZAxis.Visible = 'off';
+% M = length(UavTeam.Uav);
+
+hold off
+if mode==3
+    for i=1:length(Roundabout)
+    %     mydrawcolorball(AirwayNetwork(R_island(i),1:2),r_island_outer,0,'g');
+    %     mydrawcolorball(AirwayNetwork(R_island(i),1:2),r_island_inner,0,'w');
+    %     text(Roundabout(i).pos(1),Roundabout(i).pos(2),Roundabout(i).pos(3),['R',num2str(i)]);
+    mysector(AirwayNetwork(Roundabout(i).num,1:2),AirwayNetwork(Roundabout(i).num,3)+rh_z/2,AirwayNetwork(Roundabout(i).num,3)+rh_z*3/2,...
+        Roundabout(i).changedis-1,Roundabout(i).changedis,[1 1 0],-pi,pi,0,1,3000,0.7);
+%     mysector(AirwayNetwork(Roundabout(i).num,1:2),AirwayNetwork(Roundabout(i).num,3)+rh_z/2,AirwayNetwork(Roundabout(i).num,3)+rh_z*3/2,Roundabout(i).radius_i,Roundabout(i).radius_o,[1 1 0],-pi,pi,0,1,3000,0.7);
+
+    %    mysector(AirwayNetwork(Roundabout(i).num,1:2),AirwayNetwork(Roundabout(i).num,3)-20,AirwayNetwork(Roundabout(i).num,3),Roundabout(i).radius_i+lanewidth,Roundabout(i).radius_o-lanewidth,[1 1 1],-pi,pi,0,1,3000,0.7);
+axis equal
+    %     mysector(AirwayNetwork(Roundabout(i).num,1:2),AirwayNetwork(Roundabout(i).num,3)-20,AirwayNetwork(Roundabout(i).num,3),Roundabout(i).radius_o-lanewidth,Roundabout(i).radius_o,[1 1 0],-pi,pi,0,1,3000,0.7);
+    end
+else
+% %roundabout Plot
+for i=1:length(Roundabout)
+    %     mydrawcolorball(AirwayNetwork(R_island(i),1:2),r_island_outer,0,'g');
+    %     mydrawcolorball(AirwayNetwork(R_island(i),1:2),r_island_inner,0,'w');
+    %     text(Roundabout(i).pos(1),Roundabout(i).pos(2),Roundabout(i).pos(3),['R',num2str(i)]);
+    mysector(AirwayNetwork(Roundabout(i).num,1:2),AirwayNetwork(Roundabout(i).num,3)+rh_z/2,AirwayNetwork(Roundabout(i).num,3)+rh_z*3/2,Roundabout(i).radius_i,Roundabout(i).radius_o,[1 1 0],-pi,pi,0,1,3000,0.7);
+    %    mysector(AirwayNetwork(Roundabout(i).num,1:2),AirwayNetwork(Roundabout(i).num,3)-20,AirwayNetwork(Roundabout(i).num,3),Roundabout(i).radius_i+lanewidth,Roundabout(i).radius_o-lanewidth,[1 1 1],-pi,pi,0,1,3000,0.7);
+%     mysector(AirwayNetwork(Roundabout(i).num,1:2),AirwayNetwork(Roundabout(i).num,3)-20,AirwayNetwork(Roundabout(i).num,3),Roundabout(i).radius_o-lanewidth,Roundabout(i).radius_o,[1 1 0],-pi,pi,0,1,3000,0.7);
+
+hold on
+    for jj=1:length(Roundabout(i).connection)
+% for jj=1:1
+        theta1=atan2(-Roundabout(i).Highway(jj).om(2)+Roundabout(i).pos(2),-Roundabout(i).Highway(jj).om(1)+Roundabout(i).pos(1));
+        theta2=atan2(-Roundabout(i).Highway(jj).om(2)+Roundabout(i).Highway(jj).p(2),-Roundabout(i).Highway(jj).om(1)+Roundabout(i).Highway(jj).p(1));
+        theta3=atan2(-Roundabout(i).Highway(jj).od(2)+Roundabout(i).pos(2),-Roundabout(i).Highway(jj).od(1)+Roundabout(i).pos(1));
+        theta4=atan2(-Roundabout(i).Highway(jj).od(2)+Roundabout(i).Highway(jj).p(2),-Roundabout(i).Highway(jj).od(1)+Roundabout(i).Highway(jj).p(1));
+        theta6=atan2(Roundabout(i).Highway(jj).om(2)-Roundabout(i).pos(2),Roundabout(i).Highway(jj).om(1)-Roundabout(i).pos(1));
+        theta5=atan2(Roundabout(i).Highway(jj).od(2)-Roundabout(i).pos(2),Roundabout(i).Highway(jj).od(1)-Roundabout(i).pos(1));
+        mysector(AirwayNetwork(Roundabout(i).num,1:2),AirwayNetwork(Roundabout(i).num,3)-rh_z/2,AirwayNetwork(Roundabout(i).num,3)+rh_z/2,Roundabout(i).radius_i+0.01,Roundabout(i).radius_o,[1 0 0],theta5-Roundabout(i).buffer,theta5+pi/180,20,0,300,0.5,-1);
+%         mysector(AirwayNetwork(Roundabout(i).num,1:2),AirwayNetwork(Roundabout(i).num,3)-50,AirwayNetwork(Roundabout(i).num,3)-30,Roundabout(i).radius_o-lanewidth+0.01,Roundabout(i).radius_o-0.01,[1 0 0],theta5-pi/16,theta5+pi/180,30,0,300,0.5,-1);
+        mysector(AirwayNetwork(Roundabout(i).num,1:2),AirwayNetwork(Roundabout(i).num,3)+rh_z/2,AirwayNetwork(Roundabout(i).num,3)+rh_z*3/2,Roundabout(i).radius_i+0.01,Roundabout(i).radius_o-0.01,[1 0 0],theta6-pi/180,theta6+Roundabout(i).buffer,20,0,300,0.5,1);
+%         mysector(AirwayNetwork(Roundabout(i).num,1:2),AirwayNetwork(Roundabout(i).num,3)-20,AirwayNetwork(Roundabout(i).num,3),Roundabout(i).radius_o-lanewidth+0.01,Roundabout(i).radius_o-0.01,[1 0 0],theta6-pi/180,theta6+pi/16,30,0,300,0.5,1);
+
+        mysector(Roundabout(i).Highway(jj).om(1:2),Roundabout(i).Highway(jj).om(3)-rh_z/2,Roundabout(i).Highway(jj).om(3)+rh_z/2,norm(Roundabout(i).Highway(jj).om-Roundabout(i).Highway(jj).p)-rh2/2-rh1,norm(Roundabout(i).Highway(jj).om-Roundabout(i).Highway(jj).p)-rh2/2,[0 1 0],theta2,theta1,0,0,3000,0.5,1);
+        %         mysector(Roundabout(i).Highway(jj).om(1:2),Roundabout(i).Highway(jj).om(3)-20,Roundabout(i).Highway(jj).om(3),norm(Roundabout(i).Highway(jj).om-Roundabout(i).Highway(jj).p)-rh2/2-lanewidth,norm(Roundabout(i).Highway(jj).om-Roundabout(i).Highway(jj).p)-rh2/2-rh1+lanewidth,[1 1 1],theta2,theta1,20,0,300,0.4,1);
+%         mysector(Roundabout(i).Highway(jj).om(1:2),Roundabout(i).Highway(jj).om(3)-50,Roundabout(i).Highway(jj).om(3)-30,norm(Roundabout(i).Highway(jj).om-Roundabout(i).Highway(jj).p)-rh2/2-rh1+lanewidth,norm(Roundabout(i).Highway(jj).om-Roundabout(i).Highway(jj).p)-rh2/2-rh1,[0 1 0],theta2,theta1,0,0,3000,0.5,1);
+
+%         mysector(Roundabout(i).Highway(jj).od(1:2),Roundabout(i).Highway(jj).od(3)-50,Roundabout(i).Highway(jj).od(3)-30,norm(Roundabout(i).Highway(jj).om-Roundabout(i).Highway(jj).p)-rh2/2-rh1+lanewidth,norm(Roundabout(i).Highway(jj).om-Roundabout(i).Highway(jj).p)-rh2/2-rh1,[0 0 1],theta3,theta4,0,0,3000,0.5,-1);
+        %         mysector(Roundabout(i).Highway(jj).od(1:2),Roundabout(i).Highway(jj).od(3)-40,Roundabout(i).Highway(jj).od(3)-20,norm(Roundabout(i).Highway(jj).om-Roundabout(i).Highway(jj).p)-rh2/2-rh1+lanewidth,norm(Roundabout(i).Highway(jj).om-Roundabout(i).Highway(jj).p)-rh2/2-lanewidth,[1 1 1],theta3,theta4,20,0,300,0.4,-1);
+        mysector(Roundabout(i).Highway(jj).od(1:2),Roundabout(i).Highway(jj).od(3)-rh_z/2,Roundabout(i).Highway(jj).od(3)+rh_z/2,norm(Roundabout(i).Highway(jj).om-Roundabout(i).Highway(jj).p)-rh2/2-rh1,norm(Roundabout(i).Highway(jj).om-Roundabout(i).Highway(jj).p)-rh2/2,[0 0 1],theta3,theta4,0,0,3000,0.5,-1);
+    end
+end
+end
+% Airport Plot
+% for i=1:length(Airport)
+%     %     mydrawcolorball(AirwayNetwork(Airport(i),1:2),r_airport,0,'y');
+%     mycylinder(AirwayNetwork(Airport(i).num,1:2),AirwayNetwork(Airport(i).num,3)-200,AirwayNetwork(Airport(i).num,3),Airport(i).radius,9);
+%     text(Airport(i).pos(1),Airport(i).pos(2),Airport(i).pos(3),['A',num2str(i)]);
+% 
+% end
+%%%%%%%%%
+axis equal
+for i=1:size(AirwayNetwork,1)
+% for i=1:1
+if scenario==1 && i==2
+
+else
+    adjacent_point = find(AdjacentMatrix(i,:)==1);
+    N1 = [AirwayNetwork(i,:)]';
+    for j = 1 : size(adjacent_point,2)
+%         if  i==3||adjacent_point(j)==3
+            N2=[AirwayNetwork(adjacent_point(j),:)]';
+            [pt1,pt2,pt3,ptz]=tunnel(N1,N2,rh1,rh2,rh_z);
+            [pts1,pts2,pts3,ptsz]=tunnel(N2,N1,rh1,rh2,rh_z);
+            temp=0;
+            if ismember(i,find(AdjacentMatrix*ones(size(AdjacentMatrix,1),1) == 1))==true
+                num = find(i==find(AdjacentMatrix*ones(size(AdjacentMatrix,1),1) ==1));
+                radius = Airport(num).radius;
+                pt1=pt1+(pt2-pt1)*radius/norm(pt2-pt1);
+                pts2=pts2+(pt2-pt1)*radius/norm(pt2-pt1);
+                pts3=pts3+(pt2-pt1)*radius/norm(pt2-pt1);
+                ptsz=ptsz+(pt2-pt1)*radius/norm(pt2-pt1);
+                temp=1;%blue
+            end
+            if ismember(adjacent_point(j),find(AdjacentMatrix*ones(size(AdjacentMatrix,1),1) == 1))==true
+                num = find(adjacent_point(j)==find(AdjacentMatrix*ones(size(AdjacentMatrix,1),1) ==1));
+                radius = Airport(num).radius;
+                pt2=pt2+(pt1-pt2)*radius/norm(pt1-pt2);
+                pt3=pt3+(pt1-pt2)*radius/norm(pt1-pt2);
+                pts1=pts1+(pt1-pt2)*radius/norm(pt1-pt2);
+                ptz=ptz+(pt1-pt2)*radius/norm(pt1-pt2);
+                temp=-1;%blue
+            end
+            if ismember(i,find(AdjacentMatrix*ones(size(AdjacentMatrix,1),1) == 2))==true
+                num = find(i==find(AdjacentMatrix*ones(size(AdjacentMatrix,1),1) ==2))*2;
+                radius = Node(num).radius;
+                pt1=pt1+(pt2-pt1)*radius/norm(pt2-pt1);
+                pts2=pts2+(pt2-pt1)*radius/norm(pt2-pt1);
+                pts3=pts3+(pt2-pt1)*radius/norm(pt2-pt1);
+                ptsz=ptsz+(pt2-pt1)*radius/norm(pt2-pt1);
+            end
+            if ismember(adjacent_point(j),find(AdjacentMatrix*ones(size(AdjacentMatrix,1),1) == 2))==true
+                num = find(adjacent_point(j)==find(AdjacentMatrix*ones(size(AdjacentMatrix,1),1) ==2))*2;
+                radius = Node(num).radius;
+                pt2=pt2+(pt1-pt2)*radius/norm(pt1-pt2);
+                pt3=pt3+(pt1-pt2)*radius/norm(pt1-pt2);
+                pts1=pts1+(pt1-pt2)*radius/norm(pt1-pt2);
+                ptz=ptz+(pt1-pt2)*radius/norm(pt1-pt2);
+            end
+            if ismember(i,find(AdjacentMatrix*ones(size(AdjacentMatrix,1),1) >2))==true
+                num = find(i==find(AdjacentMatrix*ones(size(AdjacentMatrix,1),1) >2));
+                radius_o = Roundabout(num).changedis;
+                pt1=pt1+(pt2-pt1)*radius_o/norm(pt2-pt1);
+%                 dis=-pt2+pt1+100*(pt2-pt1)/norm(pt2-pt1);
+%                                 pt2=pt2+dis;
+%                                 pt3=pt3+dis;
+%                                 ptz=ptz+dis;
+                pts2=pts2+(pt2-pt1)*radius_o/norm(pt2-pt1);
+                pts3=pts3+(pt2-pt1)*radius_o/norm(pt2-pt1);
+                ptsz=ptsz+(pt2-pt1)*radius_o/norm(pt2-pt1);
+                temp=-1;%blue
+            end
+            if ismember(adjacent_point(j),find(AdjacentMatrix*ones(size(AdjacentMatrix,1),1) >2))==true
+                num = find(adjacent_point(j)==find(AdjacentMatrix*ones(size(AdjacentMatrix,1),1) >2));
+                radius_o = Roundabout(num).changedis;
+                pt2=pt2+(pt1-pt2)*radius_o/norm(pt1-pt2);
+%                                 pt1=pt2+(pt1-pt2)*100/norm(pt1-pt2);
+                pt3=pt3+(pt1-pt2)*radius_o/norm(pt1-pt2);
+                pts1=pts1+(pt1-pt2)*radius_o/norm(pt1-pt2);
+                ptz=ptz+(pt1-pt2)*radius_o/norm(pt1-pt2);
+
+                temp=1;%green
+
+            end
+%             temp2=(pt1+pt3+ptz-pt2)/2;
+%             for k = 1:size(AirwayList,1)
+%                 if AirwayList(k,1)== i && AirwayList(k,2)==adjacent_point(j)
+%                     text(temp2(1),temp2(2),temp2(3),[num2str(k)]);
+%                 end
+%             end
+            pt4=pt1+pt3-pt2;
+
+            pts4=pts1+pts3-pts2;
+%             temp11=(pt3-pt2)*lanewidth/norm(pt3-pt2);
+%             temp12=(pt3-pt2)*(rh1-2*lanewidth)/norm(pt3-pt2);
+%             pt3=pt2+(pt3-pt2)*(lanewidth)/norm(pt3-pt2);
+            mycube(pt2'+[0 0 rh_z/2],pt3'+[0 0 rh_z/2],pt1'+[0 0 rh_z/2],ptz',temp,0.5,1);
+%             pt3=pt3+temp11;
+%             pt1=pt1+temp11;
+%             pt2=pt2+temp11;
+%             ptz=ptz+temp11;
+%             pt3=pt2+(pt3-pt2)*(rh1-2*lanewidth)/norm(pt3-pt2);
+%             mycube(pt2'-[0 0 40],pt3'-[0 0 40],pt1'-[0 0 40],ptz'-[0 0 40],0,0.5,1);
+%             pt3=pt3+temp12;
+%             pt1=pt1+temp12;
+%             pt2=pt2+temp12;
+%             ptz=ptz+temp12;
+%             pt3=pt2+(pt3-pt2)*(lanewidth)/norm(pt3-pt2);
+%             mycube(pt2'-[0 0 50],pt3'-[0 0 50],pt1'-[0 0 50],ptz'-[0 0 50],temp,0.5,1); %别删
+            %             mycube(pts2',pts3',pts1',ptsz',[0 0 1],0.7);
+            %             mycube(pts2',pts3',pts1',ptsz',[0 0 1],0.7);
+
+%         end
+    end
+end
+end
+
+% Note Plot
+
+for i=1:length(Node)
+
+%     if Node(i).state==1
+if i<=2
+        if rem(i,2)==1 
+            cl=[0 1 0];
+        else
+            cl=[0 0 1];
+        end
+else
+            if rem(i,2)==0 
+            cl=[0 1 0];
+        else
+            cl=[0 0 1];
+            end
+end
+        mysector(Node(i).Or(1:2),Node(i).Or(3)-rh_z/2,Node(i).Or(3)+rh_z/2,Node(i).ri,Node(i).ro,cl,Node(i).theta2,Node(i).theta1,0,0,300,0.5,Node(i).state);
+%         mysector(Node(i).Or(1:2),Node(i).Or(3)-rh_z/2,Node(i).Or(3)+rh_z/2,,9,Node(i).theta1,Node(i).theta2);
+%         else
+%         mysector(Node(i).Or(1:2),Node(i).Or(3)-rh_z/2,Node(i).Or(3)+rh_z/2,norm(Node(i).Or-temp)-rh2,[1 1 0],Node(i).theta1,Node(i).theta2,0,1,300,0.5,Node(i).state);
+%         mysector(Node(i).Or(1:2),Node(i).Or(3)-rh_z/2,Node(i).Or(3)+rh_z/2,norm(Node(i).Or-temp)-rh2-rh1,9,Node(i).theta1,Node(i).theta2);
+%         end
+%     else
+%         if rem(i,2)==1
+%         mysector(Node(i).Or(1:2),Node(i).Or(3)-rh_z/2,Node(i).Or(3)+rh_z/2,norm(Node(i).Or-temp)-rh1,15,Node(i).theta1,Node(i).theta2);
+%         mysector(Node(i).Or(1:2),Node(i).Or(3)-rh_z/2,Node(i).Or(3)+rh_z/2,norm(Node(i).Or-temp),9,Node(i).theta1,Node(i).theta2);
+%         else
+%         mysector(Node(i).Or(1:2),Node(i).Or(3)-rh_z/2,Node(i).Or(3)+rh_z/2,norm(Node(i).Or-temp)+rh2,9,Node(i).theta1,Node(i).theta2);
+%         mysector(Node(i).Or(1:2),Node(i).Or(3)-rh_z/2,Node(i).Or(3)+rh_z/2,norm(Node(i).Or-temp)+rh2+rh1,9,Node(i).theta1,Node(i).theta2);
+%         end
+%     end
+%     text(Node(i).pos(1),Node(i).pos(2),Node(i).pos(3),['N',num2str(i)]);
+end
+%%%%%%%%
+
+% axis([-1500 2500 -1000 1500])
+axis equal
+% out = 0;
